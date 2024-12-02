@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Authentication API
+  version: 1.0.0
+  description: This project is an authentication API using Django REST Framework (DRF)
+    with JWT for secure user registration, login, profile management, password change,
+    and password reset functionalities.
+paths:
+  /api/user/changepassword/:
+    post:
+      operationId: api_user_changepassword_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/user/login/:
+    post:
+      operationId: api_user_login_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/user/profile/:
+    get:
+      operationId: api_user_profile_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/user/register/:
+    post:
+      operationId: api_user_register_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/user/reset-password/{uid}/{token}/:
+    post:
+      operationId: api_user_reset_password_create
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/user/send-reset-password/:
+    post:
+      operationId: api_user_send_reset_password_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
