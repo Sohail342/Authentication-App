@@ -12,21 +12,34 @@ export default function useAuth() {
     error.value = null;
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/user/login/", {
+      const response = await axios.post("http://127.0.0.1:9000/user/login/", {
         email,
         password,
       });
 
+
       // Store the user token and optional user data
       token.value = response.data.token;
-      user.value = { email }; // or fetch additional user details if necessary
+      user.value = { email };
 
       // Store token in localStorage for persistence
       localStorage.setItem("authToken", token.value);
 
-      return response.data.msg; // Return success message
+      return response.data.msg;
     } catch (err) {
-      error.value = err.response?.data?.errors.non_field_errors || ["Login failed"];
+      if (err.response) {
+        // Check if there is a response and error message
+        if (err.response.status === 401) {
+          // Handle authentication failure
+          error.value = err.response.data.errors[0] || "Invalid credentials";
+        } else {
+          // Handle other errors (network, server, etc.)
+          error.value = "An unknown error occurred";
+        }
+      } else {
+        // If no response from the server (e.g., network error)
+        error.value = "Network error, please try again later.";
+      }
     } finally {
       loading.value = false;
     }
